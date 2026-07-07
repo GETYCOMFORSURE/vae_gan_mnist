@@ -1,25 +1,29 @@
-# VAE Project Plan
+# VAE vs GAN Project Plan
 
 ## Goal
-Implement a Variational Autoencoder in PyTorch from scratch, then apply it to molecular data.
+Implement both a VAE and a GAN in PyTorch on MNIST, then compare the two generative approaches.
 
-## Phase 1 — Understand the math (2-3h)
-- What is an autoencoder (encode → compress → decode)
-- What makes it *variational* (latent space is a distribution, not a point)
-- The loss function: reconstruction loss + KL divergence
-- Why this matters for molecule generation
+## Data
+MNIST (handwritten digits, 28×28 grayscale) via `torchvision.datasets.MNIST`.
 
-## Phase 2 — Implement on simple data (3-4h)
-- Dataset: MNIST digits (standard VAE benchmark)
-- Build encoder: input → mean and variance of latent distribution
-- Build decoder: sample from latent space → reconstruct input
-- Train and visualize: can we generate new digits by sampling?
+## Phase 1 — Understand the math (3-4h)
+- Autoencoder → VAE: latent space as a distribution, reconstruction loss + KL divergence
+- GAN: Generator vs Discriminator, the minimax game, adversarial loss
+- Key difference: VAE has an explicit likelihood objective, GAN doesn't
+- Why GANs are harder to train (mode collapse, instability) vs why VAEs tend to produce blurrier samples
 
-## Phase 3 — Apply to molecules (3-4h)
-- Dataset: SMILES strings (molecular representations)
-- Encode molecules into continuous latent space
-- Sample new points → decode into new molecules
-- Compare to Gómez-Bombarelli et al. 2018 (the seminal paper)
+## Phase 2 — Implement VAE (3-4h)
+- Encoder → mean/variance of latent distribution
+- Decoder → sample from latent space → reconstruct
+- Train and visualize: generate new digits by sampling
 
-## Expected outcome
-A working VAE that can generate novel molecular structures by sampling from a learned latent space.
+## Phase 3 — Implement GAN (3-4h)
+- Generator: latent noise → fake digit
+- Discriminator: image → real/fake
+- Train both alternately, track loss curves
+
+## Phase 4 — Direct comparison (2-3h)
+- Sample quality: VAE (smooth, blurrier) vs GAN (sharper, riskier)
+- Training stability: VAE loss curve vs GAN loss curve — does GAN show collapse/oscillation?
+- Latent space smoothness: VAE's is built-in; does GAN's interpolate as cleanly?
+- Write-up: GAN's advantages, and where its problems actually show up — answering Cheng's question directly
