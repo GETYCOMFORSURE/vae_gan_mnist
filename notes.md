@@ -107,11 +107,15 @@ Purely Generator (see below)
 <img width="746" height="126" alt="Screenshot 2026-07-08 at 17 39 42" src="https://github.com/user-attachments/assets/1340d620-a7ee-4460-b5b2-3fe92db6101a" />
 
 ### The Discriminator
-- basically a **classifier**, trained via supervised learning: real (1) vs fake (0)
+- basically a **classifier**
 - Trained on both real MNIST images (should output "real") and generator's fake images (should output "fake")
 - Also fully-connected: Dense → LeakyReLU → Dense → **sigmoid** activation (outputs probability between 0 and 1)
 
-<img width="747" height="143" alt="Screenshot 2026-07-08 at 17 44 30" src="https://github.com/user-attachments/assets/5752ef63-2b71-43c5-a308-e7ecf4bb8629" />
+<img width="746" height="141" alt="Screenshot 2026-07-08 at 17 48 33" src="https://github.com/user-attachments/assets/aacfca70-d382-405f-95c9-75296f2bac05" />
+
+<img width="748" height="147" alt="Screenshot 2026-07-08 at 17 48 45" src="https://github.com/user-attachments/assets/eab8cda7-ba49-48c2-a04b-6d33b329e12a" />
+
+
 
 ### The Train Loop
 Discriminator and generator are trained **in turn**, alternating:
