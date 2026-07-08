@@ -90,3 +90,80 @@ def vae_loss(input_img, output):
     total_loss = K.mean(reconstruction_loss + kl_loss)
     return total_loss
 ```
+## Generator vs Discriminator → GAN
+
+### [Understanding Generative Adversarial Networks](https://naokishibuya.github.io/blog/2017-11-03-understanding-generative-adversarial-networks/)
+
+**Background**
+- GAN proposed by Ian Goodfellow, Yoshua Bengio, et al. in 2014
+- Two parts: **generator** (generates images) + **discriminator** (classifies real vs fake)
+
+### The Generator
+- Input: **latent samples** — a series of randomly generated numbers (e.g. 100 random numbers)
+- Output: reshaped into image size (e.g. 784 → 28×28 for MNIST)
+- Simple fully-connected architecture: Dense → LeakyReLU → Dense → **tanh** activation
+- tanh is recommended for GAN training (per "How to Train a GAN? Tips and tricks"); requires rescaling images to [-1, 1]
+- Without training, generator produces pure garbage — needs the GAN loop to actually learn
+
+### The Discriminator
+- A **classifier** trained via supervised learning: real (1) vs fake (0)
+- Trained on both real MNIST images (should output "real") and generator's fake images (should output "fake")
+- Also fully-connected: Dense → LeakyReLU → Dense → **sigmoid** activation (outputs probability between 0 and 1)
+
+### The GAN (connecting the two)
+- GAN = generator → discriminator, chained together
+- Feed a latent sample into the GAN → generator produces an image internally → discriminator classifies it
+
+### Training the GAN means Training the Generator
+- Feed latent samples through the GAN, label = 1 ("real") — this is what we *want* the generator to achieve
+- Generator starts bad → high loss → backprop updates generator's weights to produce more realistic images
+- **Key catch**: during generator training, the discriminator must be set **non-trainable** — it's only being used as a fixed classifier/judge in this step, not being updated itself
+
+### The Train Loop
+Discriminator and generator are trained **in turn**, alternating:
+1. Set discriminator **trainable**
+2. Train discriminator on real MNIST images + generator's fake images → learn to classify real vs fake
+3. Set discriminator **non-trainable**
+4. Train generator (via the full GAN): feed latent samples → generator produces images → discriminator classifies → backprop only updates generator
+
+Repeat until neither can improve further (ideally).
+
+### But does it work?
+- Results are mixed — some generated digits look good, others don't
+- Training GANs needs a lot of empirical hacks (e.g. label smoothing) — referenced: [ganhacks by Soumith Chintala et al., Facebook AI Research](https://github.com/soumith/ganhacks)
+- **Training imbalance problems observed**:
+  - If discriminator trains much faster than generator → generator gives up learning
+  - In some cases, generator learns to fool the discriminator so well the discriminator stops learning to classify correctly
+- Suggests more complex architectures like **DCGAN** (Deep Convolutional GAN) could improve results over this simple fully-connected version
+
+### Code (Keras)
+
+**Generator**
+```python
+generator = Sequential([
+    Dense(128, input_shape=(100,)),
+    LeakyReLU(alpha=0.01),
+    Dense(784),
+    Activation('tanh')
+], name='generator')
+```
+
+**Discriminator**
+```python
+discriminator = Sequential([
+    Dense(128, input_shape=(784,)),
+    LeakyReLU(alpha=0.01),
+    Dense(1),
+    Activation('sigmoid')
+], name='discriminator')
+```
+
+**Connecting into a GAN**
+```python
+gan = Sequential([
+    generator,
+    discriminator
+])
+
+gan.summary()
+```
