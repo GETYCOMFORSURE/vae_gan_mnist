@@ -157,3 +157,7 @@ gan = Sequential([
 
 gan.summary()
 ```
+## 3. VAE vs GAN
+
+### Resource:
+- [VAE v/s GAN](https://medium.com/@parakatta/vae-v-s-gan-a-case-study-b09c7169ac02)
