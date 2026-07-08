@@ -6,7 +6,7 @@
 - [Variational Autoencoders by Arxiv Insights](https://www.youtube.com/watch?v=9zKuYvjFFS8)
 - [Intuitively Understanding Variational Autoencoders](https://medium.com/data-science/intuitively-understanding-variational-autoencoders-1bfe67eb5daf)
 
-### Why VAEs?
+### Why Variational Autoencoders (VAEs)?
 Generative models can make brand-new random outputs, but often you want to **explore/alter existing data** in a specific direction — VAEs are especially good at this.
 
 ### Standard Autoencoder
@@ -14,11 +14,12 @@ Generative models can make brand-new random outputs, but often you want to **exp
 - Trained via **reconstruction loss** (MSE or cross-entropy between output and input)
 - Encoder is forced to discard unimportant info, keep only what's needed to reconstruct
 
-**The problem**
+The problem
+
 - The latent space learned this way is **not continuous** — it forms disconnected clusters
 - Fine for reconstructing known inputs, but bad for generation: sampling a random point between clusters → decoder has never seen that region → garbage output
 
-### What Variational Autoencoders (VAEs) change
+### What VAEs change
 - Encoder outputs **two vectors** instead of one encoding: a mean vector **μ** and a std-dev vector **σ**
 - These define a distribution per input; the actual encoding is **sampled** from N(μ, σ²)
 - Same input → slightly different encoding every pass (stochastic)
