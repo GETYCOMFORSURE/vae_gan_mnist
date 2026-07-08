@@ -33,7 +33,9 @@ $$
 $$
 
 #### Reconstruction loss
-purely **reconstruction loss**: the same as that used in MLP, can be Binary Cross-Entropy, Mean Squared Error, etc.
+the same as that used in MLP, can be Binary Cross-Entropy, Mean Squared Error, etc.
+
+purely **reconstruction loss**
 
 <img width="687" height="355" alt="Screenshot 2026-07-08 at 13 51 43" src="https://github.com/user-attachments/assets/ae7aeb23-056f-4cb1-8851-4f29e8c1c42c" />
 
