@@ -33,15 +33,15 @@ $$
 $$
 
 #### Reconstruction loss
-the same as that used in MLP, can be Binary Cross-Entropy, Mean Squared Error, etc.
-
-purely **reconstruction loss**
+- the same as that used in MLP, can be Binary Cross-Entropy, Mean Squared Error, etc.
+- purely **reconstruction loss** (see below)
 
 <img width="687" height="355" alt="Screenshot 2026-07-08 at 13 51 43" src="https://github.com/user-attachments/assets/ae7aeb23-056f-4cb1-8851-4f29e8c1c42c" />
 
 #### KL loss
-purely **KL loss**: Pulls all encodings toward the center, densely packed, evenly spread
 - Add KL divergence term to the loss: penalizes how far the learned distribution (μ, σ) is from a standard normal N(0, I)
+- purely **KL loss** (see below): Pulls all encodings toward the center, densely packed, evenly spread
+
 
 <img width="674" height="659" alt="Screenshot 2026-07-08 at 13 52 14" src="https://github.com/user-attachments/assets/bc34199a-c39d-4ee7-92d3-f0c704af3c1a" />
 
