@@ -1,6 +1,6 @@
 # Notes
 
-## Autoencoder → VAE
+## 1. Autoencoder → VAE
 
 ### Resources
 - [Variational Autoencoders by Arxiv Insights](https://www.youtube.com/watch?v=9zKuYvjFFS8)
@@ -90,7 +90,7 @@ def vae_loss(input_img, output):
     total_loss = K.mean(reconstruction_loss + kl_loss)
     return total_loss
 ```
-## Generator vs Discriminator → GAN
+## 2. Generator vs Discriminator → GAN
 
 ### [Understanding Generative Adversarial Networks](https://naokishibuya.github.io/blog/2017-11-03-understanding-generative-adversarial-networks/)
 
