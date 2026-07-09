@@ -1,4 +1,4 @@
-# Notes
+# Learning
 
 ## 1. Autoencoder → VAE
 
