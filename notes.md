@@ -1,7 +1,18 @@
 # Notes
 some notes jotted down during coding
 
-## building data loader
+## divde the components
+### components in any ML pipeline (near-universal, especially in PyTorch)
+1. Data loader — get data in, clean, ready to feed
+2. Model — define the architecture (what transforms input → output)
+3. Loss function — define what "wrong" means, numerically
+4. Training loop — repeatedly: feed batch → forward pass → compute loss → backward pass → update weights
+
+(optional, add after the above 4 are working)
+5. Evaluation — check performance on held-out data / sanity-check outputs (e.g. do generated digits actually look real, not just "loss went down")
+6. Inference/deployment — use the trained model on new data, only needed if packaging for others to use
+
+## data loader
 ### resources:
 - [MNIST documentation](https://docs.pytorch.org/vision/main/generated/torchvision.datasets.MNIST.html)
 
@@ -25,7 +36,7 @@ git commit -m "your commit message here"
 git push
 ```
 
-### sections within data loader: all supervised/unsupervised pipeline needs these (in order)
+### components in any data loader (in order)
 - Get raw data into memory (**load**)
 - Separate data you train on from data you evaluate on (**split**) — do this before normalizing, so you don't leak test-set information into your normalization stats
 - Make sure values are in a range the model can learn from efficiently (**normalize**) — because gradient descent behaves badly on wildly different feature scales; compute mean/std from the training set only
