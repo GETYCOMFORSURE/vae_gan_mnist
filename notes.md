@@ -12,7 +12,7 @@ some notes jotted down during coding
 5. Evaluation — check performance on held-out data / sanity-check outputs (e.g. do generated digits actually look real, not just "loss went down")
 6. Inference/deployment — use the trained model on new data, only needed if packaging for others to use
 
-## data loader
+## 1. data loader
 ### resources:
 - [MNIST documentation](https://docs.pytorch.org/vision/main/generated/torchvision.datasets.MNIST.html)
 
