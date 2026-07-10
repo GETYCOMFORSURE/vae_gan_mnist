@@ -12,7 +12,6 @@ some notes jotted down during coding
 6. Inference/deployment — use the trained model on new data, only needed if packaging for others to use
 
 ## 1. data loader
-### resources:
 
 ### recall: method, function, attribute, argument
 - method - a type of function
