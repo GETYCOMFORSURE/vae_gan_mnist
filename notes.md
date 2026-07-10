@@ -25,7 +25,6 @@ list[attribute]
 object.method(argument)
 list.method(argument)
 ```
-
 ### recall: save changes in github codespace using terminal
 ```python
 git add .
@@ -73,3 +72,9 @@ plt.imshow(image.squeeze(), cmap='gray')
 plt.title(f'Label: {label}')
 plt.show()
 ```
+
+N.B.
+
+- `.squeeze()` — drops the size-1 channel dim: `[1,28,28]` → `[28,28]`, since imshow needs 2D
+- `imshow(...)` — plots a 2D array as an image
+- `cmap='gray'` — grayscale colormap; without it, matplotlib defaults to a colored map (viridis), misrepresenting a B&W digit
