@@ -10,8 +10,8 @@ some notes jotted down during coding
 
 (optional, add after the above 4 are working)
 
-6. Evaluation — check performance on held-out data / sanity-check outputs (e.g. do generated digits actually look real, not just "loss went down")
-7. Inference/deployment — use the trained model on new data, only needed if packaging for others to use
+5. Evaluation — check performance on held-out data / sanity-check outputs (e.g. do generated digits actually look real, not just "loss went down")
+6. Inference/deployment — use the trained model on new data, only needed if packaging for others to use
 
 ## 1. data loader
 
