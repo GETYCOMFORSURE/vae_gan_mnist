@@ -40,7 +40,14 @@ git push
 - Randomize order (**shuffle**) — because if data comes in a meaningful order (e.g. sorted by label), the model can learn spurious patterns from the order itself instead of the actual features
 - Feed data to the model in small groups, not all at once (**batch**) — memory can't hold the whole dataset at once, and the model updates its weights after each small batch (not once per epoch), giving many fast, stable updates instead of one huge slow one
 
-### MNIST-specific data loader decisions
+### explain data loader decisions
+```python
+data = datasets.MNIST(
+    root='./data', 
+    train=True, 
+    download=True, 
+    transform=transform.ToTensor())
+```
 - `root='./data'` — creates a local `data` folder to store the downloaded files; standard convention, keeps files self-contained in the project, add `data/` to `.gitignore` so it doesn't get committed
 - `train=True/False` — MNIST comes pre-split: `True` = 60k training images, `False` = 10k test images (file `t10k-images-idx3-ubyte`, "t10k" = "test 10k"). No manual split step needed, unlike the cancer dataset.
 - `transform=transforms.ToTensor()` — raw data loads as a **PIL Image** (Python Imaging Library format — has width/height/mode, but PyTorch layers can't consume it directly). `ToTensor()` converts PIL → tensor and does two things at once:
