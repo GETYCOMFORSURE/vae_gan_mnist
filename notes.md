@@ -89,3 +89,7 @@ plt.show()
 ```
 - `iter(train_loader)` — turns it into an iterator
 - `next(...)` — pulls the first yielded batch
+
+## 2. model
+### encoder
+-> basically a MLP but output two vectors (mean + standard deviation)
