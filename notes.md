@@ -48,12 +48,13 @@ data = datasets.MNIST(
     download=True, 
     transform=transform.ToTensor())
 ```
-- `root='./data'` — creates a folder called `data`
-- `train=True` — True/False corresponds to 60k / 10k images. Use more data (60k) to train, less (10k) to test.
-- `transform=transforms.ToTensor()` — data loads as PIL (python imaging library), but PyTorch only works with tensors, so transform to tensor
-  - reshapes PIL's (H, W, C) → PyTorch's (C, H, W)
-  - rescales 0-255 ints → 0.0-1.0 floats → no need to normalize anymore
+- `root='./data'` — this creates a folder called data
+- `train=True` — True and False corresponds to two datasets with 60k and 10k images, respectively. I use more data (60k) to train, and use less (10k) to test.
 - `download=True` — puts it in root directory (data folder)
+- `transform=transforms.ToTensor()` — the data loaded is in PIL (python imaging library), but pytorch only works with tensor, so have to transform to tensor
+  - what does ToTensor do?
+    1. Reshapes (from PIL's (Height, Width, Channels) to PyTorch's (Channels, Height, Width))
+    2. Rescales (from 0-255 integer range down to 0.0-1.0 floats) — not need to normalize anymore
 
 ### data structure returned by the dataset
 - indexing returns a tuple: `(image, target)` according to the documentation
