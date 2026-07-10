@@ -9,6 +9,8 @@
 ### Why Variational Autoencoders (VAEs)?
 Generative models can make brand-new random outputs, but often you want to **explore/alter existing data** in a specific direction — VAEs are especially good at this.
 
+![Screenshot 2026-07-10 at 19 52 17](https://github.com/user-attachments/assets/adb8bdc4-fdbb-4c41-8bd1-4ccce8b90670)
+
 ### Standard Autoencoder
 - Two networks: **encoder** (input → small dense encoding) + **decoder** (encoding → reconstruct input)
 - Trained via **reconstruction loss** (MSE or cross-entropy between output and input)
