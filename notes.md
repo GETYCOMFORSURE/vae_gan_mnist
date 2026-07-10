@@ -7,7 +7,6 @@ some notes jotted down during coding
 2. Model — define the architecture (what transforms input → output)
 3. Loss function — define what "wrong" means, numerically
 4. Training loop — repeatedly: feed batch → forward pass → compute loss → backward pass → update weights
-
 (optional, add after the above 4 are working)
 5. Evaluation — check performance on held-out data / sanity-check outputs (e.g. do generated digits actually look real, not just "loss went down")
 6. Inference/deployment — use the trained model on new data, only needed if packaging for others to use
@@ -20,11 +19,9 @@ some notes jotted down during coding
 - method - a type of function
 - attribute - characters that make up the object
 - object - can be lists, strings, etc.
-
 ```python
 object.attribute # eg. print(dog1.name)
 list[attribute]
-
 object.method(argument)
 list.method(argument)
 ```
@@ -42,3 +39,31 @@ git push
 - Make sure values are in a range the model can learn from efficiently (**normalize**) — because gradient descent behaves badly on wildly different feature scales; compute mean/std from the training set only
 - Randomize order (**shuffle**) — because if data comes in a meaningful order (e.g. sorted by label), the model can learn spurious patterns from the order itself instead of the actual features
 - Feed data to the model in small groups, not all at once (**batch**) — memory can't hold the whole dataset at once, and the model updates its weights after each small batch (not once per epoch), giving many fast, stable updates instead of one huge slow one
+
+### MNIST-specific data loader decisions
+- `root='./data'` — creates a local `data` folder to store the downloaded files; standard convention, keeps files self-contained in the project, add `data/` to `.gitignore` so it doesn't get committed
+- `train=True/False` — MNIST comes pre-split: `True` = 60k training images, `False` = 10k test images (file `t10k-images-idx3-ubyte`, "t10k" = "test 10k"). No manual split step needed, unlike the cancer dataset.
+- `transform=transforms.ToTensor()` — raw data loads as a **PIL Image** (Python Imaging Library format — has width/height/mode, but PyTorch layers can't consume it directly). `ToTensor()` converts PIL → tensor and does two things at once:
+  1. Reshapes `(H, W, C)` → PyTorch's expected `(C, H, W)`
+  2. Rescales pixel values from `0–255` ints → `0.0–1.0` floats
+  → because of step 2, **no separate normalization step is needed for MNIST** (unlike the cancer dataset, where features had wildly different scales and needed manual normalizing)
+- `download=True` — downloads the dataset if not already present in `root`; must be `True` on first run in a fresh environment (e.g. new Colab session), or you'll hit `RuntimeError: Dataset not found`
+- Storage is environment-dependent: Colab's `./data` lives at `/content/data/` and is wiped when the runtime resets; Codespaces persists across sessions until the codespace itself is deleted; a `.py` file just sitting in a repo, unexecuted, creates nothing
+
+### data structure returned by the dataset
+- indexing returns a tuple: `(image, target)` according to the documentation
+- **target** = label = the correct answer the model should predict (the digit 0–9). This is needed for supervised learning. But VAE is unsupervised, so just discard target in the training loop by (`for images, _ in dataloader`)
+
+```python
+print(data[0]) # first `(image, target)` pair
+print(data[0][0]) # just the image
+print(data[0][1]) # just the label
+```
+
+- to take a glimpse of the data:
+```python
+image, label = data[0]
+plt.imshow(image.squeeze(), cmap='gray')
+plt.title(f'Label: {label}')
+plt.show()
+```
