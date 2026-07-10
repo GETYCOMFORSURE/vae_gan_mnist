@@ -69,12 +69,9 @@ print(data[0][1]) # just the label
 ```python
 image, label = data[0]
 plt.imshow(image.squeeze(), cmap='gray')
+# `.squeeze()` — drops the size-1 channel dim: `[1,28,28]` → `[28,28]`, since imshow needs 2D
+# `imshow(...)` — plots a 2D array as an image
+# `cmap='gray'` — grayscale colormap; without it, matplotlib defaults to a colored map (viridis), misrepresenting a B&W digit
 plt.title(f'Label: {label}')
 plt.show()
 ```
-
-N.B.
-
-- `.squeeze()` — drops the size-1 channel dim: `[1,28,28]` → `[28,28]`, since imshow needs 2D
-- `imshow(...)` — plots a 2D array as an image
-- `cmap='gray'` — grayscale colormap; without it, matplotlib defaults to a colored map (viridis), misrepresenting a B&W digit
