@@ -127,3 +127,19 @@ resources:
 - = number of the degree of freedom of one image -> label, thickness, style, etc -> so 1 dimension can't hold all of it
 - no need to hand-assign what each dimension represents, because this is unsupervised learning (network finds its own factorization by minimizing loss)
 - picked: latent_dim = 10
+
+### decoder
+- initial guess: decoder is roughly the inverse of encoder
+
+**does decoder output distribution like encoder?**
+- no — one number per pixel (0-1 brightness), not two
+- encoder needs distribution because latent space must be smooth/continuous for generation
+- decoder's job: map one z → one image, no smoothness requirement on pixel output
+
+**how many layers**
+- two (matches encoder's two layers before branching): `10 → 200 → 784`
+
+**sigmoid at the end — why**
+- MNIST pixels normalized to 0-1
+- plain `Linear` can output any real number
+- sigmoid squashes to [0,1] — not for "binary," for range-matching
