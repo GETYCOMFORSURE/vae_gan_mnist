@@ -26,4 +26,4 @@ MNIST (handwritten digits, 28×28 grayscale) via `torchvision.datasets.MNIST`.
 - Sample quality: VAE (smooth, blurrier) vs GAN (sharper, riskier)
 - Training stability: VAE loss curve vs GAN loss curve — does GAN show collapse/oscillation?
 - Latent space smoothness: VAE's is built-in; does GAN's interpolate as cleanly?
-- Write-up: GAN's advantages, and where its problems actually show up — answering Cheng's question directly
+- Write-up: GAN's advantages, and where its problems actually show up
