@@ -151,3 +151,53 @@ resources:
 
 ## 1. gan - data loader
 normalization is needed in the transform. GANs conventionally use Tanh as the generator's final activation instead of sigmoid, so VAE will normalize in sigmoid step whereas GAN has to have normalization separately.
+
+
+## 3. gan - loss, optimizer
+
+### loss: BCE
+```python
+criterion = nn.BCELoss()
+```
+- binary classification (real vs fake), D ends in sigmoid → BCE, same pairing as the cancer MLP and the VAE decoder
+- **no `reduction='sum'` here.** `reduction` only matters when you're *adding two losses together* and they must be on the same scale — that's why VAE needed it (BCE `mean` was tiny, KL was `sum`, so KL dominated → posterior collapse). GAN has one term. Default `mean` is fine.
+
+### the three targets — the whole minimax game
+| phase | input to D | target | who gets updated |
+|---|---|---|---|
+| train D | real image | **1** | D |
+| train D | fake image | **0** | D |
+| train G | fake image | **1** | G |
+
+- the **same fake image** gets label **0** when training D and label **1** when training G. That's the adversarial bit — you deliberately lie to G's loss so the gradient pushes it to fool D.
+- **why a separate phase for G at all?** D's phase gives G no gradient path — updating D teaches G nothing. Phase 2 exists *solely* to give G a signal, and the only signal available is "make D say real."
+
+### optimizer: two of them
+```python
+discriminator_optim = torch.optim.Adam(discriminator.parameters(), lr=0.0002, betas=(0.5, 0.999))
+generator_optim     = torch.optim.Adam(generator.parameters(),     lr=0.0002, betas=(0.5, 0.999))
+```
+- **two optimizers, not one.** G and D want *opposite* things — one optimizer descending one loss over both parameter sets is incoherent, nothing learns. (VAE could use one optimizer because encoder+decoder cooperate on a shared goal.) **This is the structural difference between GAN and everything before it.**
+
+### what is Adam
+- an optimizer = the rule that turns gradients into weight updates. Plain SGD is what I hand-wrote in NumPy: `W1 = W1 - lr * dW1`
+- Adam adds two things on top:
+  1. **momentum** — running average of past gradients, so updates don't zigzag on noisy batches
+  2. **per-parameter learning rates** — scales each weight's step by how big its gradients typically are
+- → converges fast, little tuning, works out of the box. Hence the default everywhere.
+
+### other optimizers
+- **SGD** — plain, no momentum. Slow, sometimes generalises better; still standard in big vision models.
+- **SGD + momentum** — middle ground, ResNet-era CV.
+- **RMSprop** — Adam's ancestor (per-param scaling, no momentum). Was the GAN default before Adam.
+- **AdamW** — Adam with fixed weight decay. Current default for transformers/LLMs.
+- ganhacks: **Adam for GANs.**
+
+### Adam's defaults, and why GANs override them
+```python
+torch.optim.Adam(params, lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
+```
+- `lr` — default `0.001`, but **GAN convention is `0.0002`** (0.001 often destabilises training)
+- `betas` — default `(0.9, 0.999)`, but **GAN convention is `(0.5, 0.999)`**. The lower first beta = less momentum. Momentum assumes the loss landscape is stable — in a GAN it isn't, because your opponent is also learning and the landscape moves under you.
+- `eps` — tiny constant to avoid divide-by-zero. Ignore.
+- `weight_decay` — L2 regularisation, off by default.
