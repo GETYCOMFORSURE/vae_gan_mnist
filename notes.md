@@ -185,3 +185,25 @@ generator_optim     = torch.optim.Adam(generator.parameters(),     lr=0.0002, be
 - Alternatives: SGD (plain, slow, sometimes generalises better) · SGD+momentum · RMSprop (Adam's ancestor, old GAN default) · AdamW (transformers/LLMs).
 - Defaults: `Adam(params, lr=0.001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0)`
 - **GAN overrides:** `lr=0.0002` (0.001 destabilises) and `betas=(0.5, 0.999)` — lower first beta = less momentum. Momentum assumes a stable loss landscape; in a GAN your opponent is also learning, so the landscape moves under you.
+
+## 4. gan - training loop
+ 
+### `.detach()` — recurring bug
+```python
+fakes = generator(noise)  # one forward pass, reused in both phases
+ 
+# phase 1: train D
+fake_loss = criterion(discriminator(fakes.detach()), fake_labels)
+# detach = D-training shouldn't backprop into G (wasted compute)
+ 
+# phase 2: train G — NOT detached, gradient must flow through D into G's weights
+g_loss = criterion(discriminator(fakes), real_labels)
+```
+- trap Q: `g_loss.backward()` puts gradients on D's weights too (graph passes through D to reach G) — why doesn't D get corrupted?
+- A: `generator_optim.step()` only touches G's `.parameters()`. D's gradients just sit unused, cleared next iteration by `discriminator_optim.zero_grad()`
+### indentation bug
+`if epoch % 10==0:` must sit outside the batch loop, not inside — else prints every batch.
+ 
+### reading loss curves
+GAN loss ≠ image quality, just G-vs-D balance. Need real samples, not just numbers, to judge progress.
+ 
