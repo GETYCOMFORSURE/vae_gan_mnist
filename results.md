@@ -1,4 +1,6 @@
-## Sample quality: VAE vs GAN
+# Results: VAE vs GAN
+
+## Sample quality
 ### VAE output
 <img width="1179" height="295" alt="Screenshot 2026-07-14 at 17 31 10" src="https://github.com/user-attachments/assets/f6e9b9d6-b6e1-42a0-855f-e6834f06216a" />
 
@@ -12,7 +14,7 @@
 - **Takeaway**: GAN trades consistency for sharper best-case quality; VAE trades peak sharpness for reliability
 
 
-## Training stability: VAE vs GAN
+## Training stability
 
 
 ### VAE loss (monotonic)
@@ -36,12 +38,4 @@
 - Takeaway: VAE's stability is structural (cooperative, single objective); 
   GAN's instability is also structural (adversarial, dual objective) — not a 
   sign either network failed, just an inherent property of each architecture.
-
-
-**Latent space**: [your sentence above]
-
-**GAN's advantage**: sharper, more realistic-looking outputs at the pixel level.
-**GAN's cost**: unstable training (two competing losses vs one), no structured 
-latent space, harder to debug when something goes wrong (loss numbers alone 
-don't tell you if it's working — must eyeball samples).
 
