@@ -1,6 +1,6 @@
 # VAE vs GAN on MNIST
 
-Two generative models, same dataset, built from scratch in PyTorch — then compared on the two things that actually differ: sample quality and training stability.
+Two generative models, same dataset, built in PyTorch — then compared on the two things that actually differ: sample quality and training stability.
 
 ## Results
 
